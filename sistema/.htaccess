@@ -1,0 +1,31 @@
+Options -Indexes
+ServerSignature Off
+
+# ── Proteger config/ ───────────────────────────────
+<FilesMatch "^(database|mail|stripe|app)\.php$">
+  Order deny,allow
+  Deny from all
+</FilesMatch>
+
+# Evitar acceso directo a config/
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Bloquear acceso a /config/
+  RewriteRule ^config/ - [F,L]
+
+  # Bloquear acceso a /includes/
+  RewriteRule ^includes/ - [F,L]
+
+  # Forzar HTTPS en producción (descomentar en VPS)
+  # RewriteCond %{HTTPS} off
+  # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# Headers de seguridad
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set X-XSS-Protection "1; mode=block"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>

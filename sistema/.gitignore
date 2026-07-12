@@ -1,0 +1,6 @@
+vendor/
+config/database.php
+config/mail.php
+config/stripe.php
+*.log
+.DS_Store
